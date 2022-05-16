@@ -43,7 +43,7 @@ class SplashScreen extends StatelessWidget {
                   CustomButton(
                     text: 'Lanjutkan',
                     onPressed: (){
-                      Navigator.pushNamed(context, '/main-page');
+                      Navigator.pushNamedAndRemoveUntil(context, '/main-page', (route) => false);
                     },
                   )
                 ],

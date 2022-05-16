@@ -10,6 +10,7 @@ Color keyBackgroundColor = Color(0xffF1F1F8);
 Color keyBlueColor = Color(0xff237BCB);
 Color keyGoldColor = Color(0xffD4AF37);
 Color transparent = Colors.transparent;
+Color secondBlackColor = Color(0xff0C0D36);
 
 TextStyle blackTextStyle = GoogleFonts.poppins(
   color: keyBlackColor,
@@ -21,4 +22,8 @@ TextStyle whiteTextStyle = GoogleFonts.poppins(
 
 TextStyle blueTextStyle = GoogleFonts.poppins(
   color: keyBlueColor,
+);
+
+TextStyle black2TextStyle = GoogleFonts.poppins(
+  color: secondBlackColor,
 );

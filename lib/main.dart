@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:touristation/cubit/page_cubit.dart';
+import 'package:touristation/ui/pages/details_page.dart';
 import 'package:touristation/ui/pages/main_page.dart';
 import 'package:touristation/ui/pages/splash_sreen.dart';
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => SplashScreen(),
           '/main-page': (context) => MainPage(),
+          '/details-page': (context) => DetailsPage(),
         }
       ),
     );
