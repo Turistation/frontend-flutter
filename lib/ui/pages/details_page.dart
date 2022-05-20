@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:touristation/shared/theme.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -51,9 +52,9 @@ class DetailsPage extends StatelessWidget {
 
     Widget userReviews(){
       return Container(
-        height: 250,
+        // height: 300,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 670, left: 24, right: 24),
+        margin: EdgeInsets.only(top: 670, left: 24, right: 24, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,8 +112,63 @@ class DetailsPage extends StatelessWidget {
                   ),
                 ]
               ),
-              
             ),
+            SizedBox(height: 20,),
+            Text(
+              "You're reviewing:",
+              style: black2TextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w500
+              ),
+            ),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  child: Text(
+                    "Your rating :",
+                  ),
+                ),
+                RatingBar.builder(
+                  minRating: 1,
+                  itemSize: 24,
+                  updateOnDrag: true,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ), 
+                  onRatingUpdate: (rating){}
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Text(
+              'Name',
+              style: black2TextStyle,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Write your name here',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+              )
+            ),
+            SizedBox(height: 10,),
+            Text(
+              'Your Review',
+              style: black2TextStyle,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Write your Review here',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+              )
+            )
           ],
         ),
       );
