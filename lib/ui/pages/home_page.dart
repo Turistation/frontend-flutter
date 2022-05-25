@@ -16,10 +16,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ApiService api = ApiService();
-  late List<Blogs> blogList;
+  late List<Blogs> blogList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadBlog();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(blogList);
     Widget header() {
       return Container(
         height: 100,
@@ -95,11 +102,10 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      PopularCard(),
-                      PopularCard(),
-                      PopularCard(),
-                      PopularCard(),
-                      PopularCard(),
+                      for (var i = 0; i < blogList.length; i++)
+                        PopularCard(
+                          blog: blogList[i],
+                        ),
                     ],
                   ),
                 ),
@@ -158,7 +164,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         this.blogList = blogList;
       });
-      debugPrint("test");
     });
     return futureBlog;
   }
