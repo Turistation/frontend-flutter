@@ -1,17 +1,26 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:touristation/models/blogs.dart';
 import 'package:touristation/shared/theme.dart';
+import 'package:touristation/services/blog_service.dart';
 import 'package:touristation/ui/widgets/gallery_card.dart';
 import 'package:touristation/ui/widgets/popular_card.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({ Key? key }) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ApiService api = ApiService();
+  late List<Blogs> blogList;
 
   @override
   Widget build(BuildContext context) {
-
-    Widget header(){
+    Widget header() {
       return Container(
         height: 100,
         width: 255,
@@ -22,9 +31,7 @@ class HomePage extends StatelessWidget {
             Text(
               'Touristation',
               style: blackTextStyle.copyWith(
-                fontSize: 25,
-                fontWeight: FontWeight.w700
-              ),
+                  fontSize: 25, fontWeight: FontWeight.w700),
             ),
             Text(
               'Forget obout work,\ncome vacation.',
@@ -37,7 +44,7 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget searchBar(){
+    Widget searchBar() {
       return Container(
         height: 56,
         width: 253,
@@ -45,7 +52,7 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: keyWhiteColor,
-          gradient: LinearGradient(colors:[
+          gradient: LinearGradient(colors: [
             keyWhiteColor,
             keyBackgroundColor.withOpacity(1),
           ]),
@@ -53,85 +60,83 @@ class HomePage extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: (){
-                showSearch(
-                  context: context, 
-                  delegate: CustmSearchDelegate());
-              }, 
-              icon: Icon(Icons.search)
-            )
+                onPressed: () {
+                  showSearch(context: context, delegate: CustmSearchDelegate());
+                },
+                icon: Icon(Icons.search))
           ],
         ),
       );
     }
 
-    Widget popularSummer(){
+    Widget popularSummer() {
       return Container(
-        height: 250,
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 20,left: 24,),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              child: Text(
-                'Popular in Summer',
-                style: blackTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700
+          height: 250,
+          width: double.infinity,
+          margin: EdgeInsets.only(
+            top: 20,
+            left: 24,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Text(
+                  'Popular in Summer',
+                  style: blackTextStyle.copyWith(
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ),
-            ),
-            SizedBox(height: 15,),
-            Container(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                  ],
-                ),
+              SizedBox(
+                height: 15,
               ),
-            )
-          ],
-        )
-      );
+              Container(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      PopularCard(),
+                      PopularCard(),
+                      PopularCard(),
+                      PopularCard(),
+                      PopularCard(),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ));
     }
 
-    Widget galleryCard(){
+    Widget galleryCard() {
       return Container(
         height: 200,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 20,left: 24, bottom: 90),
+        margin: EdgeInsets.only(top: 20, left: 24, bottom: 90),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Our Gallery',
               style: blackTextStyle.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w700
-              ),
+                  fontSize: 18, fontWeight: FontWeight.w700),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Container(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    GalleryCard(),
-                    GalleryCard(),
-                    GalleryCard(),
-                    GalleryCard(),
-                    GalleryCard(),
-                  ],
-                ),
-              )
-            )
+                child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  GalleryCard(),
+                  GalleryCard(),
+                  GalleryCard(),
+                  GalleryCard(),
+                  GalleryCard(),
+                ],
+              ),
+            ))
           ],
         ),
       );
@@ -146,10 +151,20 @@ class HomePage extends StatelessWidget {
       ],
     );
   }
+
+  Future loadBlog() {
+    Future<List<Blogs>> futureBlog = api.getBlog();
+    futureBlog.then((blogList) {
+      setState(() {
+        this.blogList = blogList;
+      });
+      debugPrint("test");
+    });
+    return futureBlog;
+  }
 }
 
-class CustmSearchDelegate extends SearchDelegate{
-
+class CustmSearchDelegate extends SearchDelegate {
   List<String> searchTerms = [
     'Big Bang london',
     'Braga, Bandung',
@@ -167,7 +182,7 @@ class CustmSearchDelegate extends SearchDelegate{
     return [
       IconButton(
         icon: Icon(Icons.clear),
-        onPressed: (){
+        onPressed: () {
           query = '';
         },
       )
@@ -178,7 +193,7 @@ class CustmSearchDelegate extends SearchDelegate{
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back),
-      onPressed: (){
+      onPressed: () {
         close(context, null);
       },
     );
@@ -187,8 +202,8 @@ class CustmSearchDelegate extends SearchDelegate{
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
-    for (var place in searchTerms){
-      if (place.toLowerCase().contains(query.toLowerCase())){
+    for (var place in searchTerms) {
+      if (place.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(place);
       }
     }
@@ -206,14 +221,14 @@ class CustmSearchDelegate extends SearchDelegate{
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var place in searchTerms){
-      if (place.toLowerCase().contains(query.toLowerCase())){
+    for (var place in searchTerms) {
+      if (place.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(place);
       }
     }
     return ListView.builder(
       itemCount: matchQuery.length,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),

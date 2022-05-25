@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:touristation/models/blogs.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/pages/details_page.dart';
 
 class PopularCard extends StatelessWidget {
-  const PopularCard({ Key? key }) : super(key: key);
+  const PopularCard({ Key? key, Blogs? blog }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
