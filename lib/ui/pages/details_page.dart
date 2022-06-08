@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:touristation/shared/theme.dart';
+import 'package:touristation/ui/widgets/custom_button.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({ Key? key }) : super(key: key);
@@ -174,13 +175,27 @@ class DetailsPage extends StatelessWidget {
       );
     }
 
+    Widget buttonsubmit(){
+      return Center(
+        child: Container(
+          margin: EdgeInsets.only(top: 1200, bottom: 30),
+          child: CustomButton(
+            text: 'Submit review', 
+            onPressed: (){},
+            width: 180,
+          )
+        ),
+      );
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
           children: [
             imageHeader(),
             aboutTeks(),
-            userReviews()
+            userReviews(),
+            buttonsubmit()
           ],
         ),
       ),

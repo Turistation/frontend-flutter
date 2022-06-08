@@ -1,12 +1,27 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:touristation/cubit/summer_blog_cubit.dart';
+import 'package:touristation/model/summer_blog_model.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/widgets/gallery_card.dart';
 import 'package:touristation/ui/widgets/popular_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    context.read<SummerBlogCubit>().fetchSummerBlog();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +80,9 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget popularSummer(){
+    Widget popularSummer(List<SummerBlogModel> summerBlog){
       return Container(
-        height: 250,
+        height: 270,
         width: double.infinity,
         margin: EdgeInsets.only(top: 20,left: 24,),
         child: Column(
@@ -87,13 +102,9 @@ class HomePage extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: [
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                    PopularCard(),
-                  ],
+                  children: summerBlog.map((SummerBlogModel summerBlog) {
+                    return PopularCard(summerBlog);
+                  }).toList(),
                 ),
               ),
             )
@@ -137,13 +148,32 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    return ListView(
-      children: [
-        header(),
-        searchBar(),
-        popularSummer(),
-        galleryCard(),
-      ],
+    return BlocConsumer<SummerBlogCubit, SummerBlogState>(
+      listener: (context, state) {
+        if(state is SummerBlogFailed){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+              backgroundColor: keyOrangeColor,
+            )
+          );
+        }
+      },
+      builder: (context, state) {
+        if(state is SummerBlogSucces){
+          return ListView(
+            children: [
+              header(),
+              searchBar(),
+              popularSummer(state.summerBlogs),
+              galleryCard(),
+            ],
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }

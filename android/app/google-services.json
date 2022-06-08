@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "570225485446",
+    "project_id": "turistation-cc8d2",
+    "storage_bucket": "turistation-cc8d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570225485446:android:4bb8300d2ea61da4099307",
+        "android_client_info": {
+          "package_name": "com.firebase.touristation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570225485446-q7bsks3spkdpqbv7d8s4s9mu7rf616ef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfEFTLa3lfJeb-RdRlw6GhGNVEpitUDR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570225485446-q7bsks3spkdpqbv7d8s4s9mu7rf616ef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
