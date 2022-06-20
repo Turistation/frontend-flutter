@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/models/blogs.dart';
+import 'package:touristation/ui/widgets/custom_reviews.dart';
 
 class DetailsPage extends StatelessWidget {
   final Blogs blog;
@@ -59,7 +60,7 @@ class DetailsPage extends StatelessWidget {
       return Container(
         // height: 300,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 30, left: 24, right: 24, bottom: 50),
+        margin: EdgeInsets.only(top: 30, left: 24,  bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -71,54 +72,26 @@ class DetailsPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20,),
-            Row(
-              children: [
-                Container(
-                  height: 17,
-                  width: 17,
-                  margin: EdgeInsets.only(right: 5),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image:AssetImage('assets/star.png'),
-                    )
-                  ),
-                ),
-                Text(
-                  '4,6',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 10,),
-            Text(
-              '''
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In orci auctor augue interdum netus proin convallis mattis velit. Condimentum nisl vitae feugiat volutpat in. Lacus risus malesuada eget tincidunt sagittis ut. Massa lorem id interdum aliquam faucibus mi.
-              ''',
-              style: black2TextStyle.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.normal
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                text: 'Review By ',
-                style: black2TextStyle,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
                 children: [
-                  TextSpan(
-                    text: 'Arfan Jadulhaq', style: black2TextStyle.copyWith(
-                      fontWeight: FontWeight.w700
-                    )
-                  ),
-                  TextSpan(
-                    text: ', 4/17/2022', style: black2TextStyle
-                  ),
-                ]
-              ),
-            ),
-            SizedBox(height: 20,),
+                  CustomReviews(),
+                  CustomReviews()
+                ],
+              )
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget yourRating(){
+      return Container(
+        margin: EdgeInsets.only(left: 24, right: 24, bottom: 50),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
               "You're reviewing:",
               style: black2TextStyle.copyWith(
@@ -184,7 +157,8 @@ class DetailsPage extends StatelessWidget {
         children: [
           imageHeader(),
           aboutTeks(),
-          userReviews()
+          userReviews(),
+          yourRating()
         ],
       )
     );
