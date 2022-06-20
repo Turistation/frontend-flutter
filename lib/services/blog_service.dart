@@ -4,7 +4,7 @@ import 'package:touristation/models/blogs.dart';
 import 'package:http/http.dart';
 
 class ApiService {
-  final String apiUrl = "http://10.0.2.2:8000/api/";
+  final String apiUrl = "https://turistation-api.arfantestserver.my.id/api/";
 
   Future<List<Blogs>> getBlog() async {
     Response res = await get(Uri.parse(apiUrl + 'blogs/recents'));

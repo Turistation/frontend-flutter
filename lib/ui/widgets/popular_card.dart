@@ -14,12 +14,12 @@ class PopularCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DetailsPage()));
+            context, MaterialPageRoute(builder: (context) => DetailsPage(blog)));
       },
       child: Container(
         padding: EdgeInsets.only(left: 15, right: 15),
         margin: EdgeInsets.only(right: 24),
-        height: 204,
+        height: 240,
         width: 177,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -42,13 +42,14 @@ class PopularCard extends StatelessWidget {
             ),
             Text(
               blog.title,
+              overflow: TextOverflow.ellipsis,
               style: blackTextStyle.copyWith(
-                  fontSize: 16, fontWeight: FontWeight.w700),
+                  fontSize: 14, fontWeight: FontWeight.w500),
             ),
             SizedBox(
               height: 5,
             ),
-            Text(blog.category, style: blackTextStyle),
+            Text(blog.category, style: blackTextStyle.copyWith(fontSize: 12)),
           ],
         ),
       ),

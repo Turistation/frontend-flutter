@@ -78,40 +78,40 @@ class _HomePageState extends State<HomePage> {
 
     Widget popularSummer() {
       return Container(
-          height: 250,
-          width: double.infinity,
-          margin: EdgeInsets.only(
-            top: 20,
-            left: 24,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: Text(
-                  'Popular in Summer',
-                  style: blackTextStyle.copyWith(
-                      fontSize: 18, fontWeight: FontWeight.w700),
+        height: 320,
+        width: double.infinity,
+        margin: EdgeInsets.only(
+          top: 20,
+          left: 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text(
+                'Popular in Summer',
+                style: blackTextStyle.copyWith(
+                    fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (var i = 0; i < blogList.length; i++)
+                      PopularCard(
+                        blog: blogList[i],
+                      ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (var i = 0; i < blogList.length; i++)
-                        PopularCard(
-                          blog: blogList[i],
-                        ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ));
+            )
+          ],
+        ));
     }
 
     Widget galleryCard() {

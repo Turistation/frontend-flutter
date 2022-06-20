@@ -1,11 +1,16 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+import 'package:intl/intl.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:touristation/shared/theme.dart';
+import 'package:touristation/models/blogs.dart';
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage({ Key? key }) : super(key: key);
+  final Blogs blog;
+  const DetailsPage(this.blog,{ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,36 +20,36 @@ class DetailsPage extends StatelessWidget {
         height: 250,
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/bukit.png'), fit: BoxFit.cover)
+          image: DecorationImage(image: NetworkImage(blog.photo), fit: BoxFit.cover)
         ),
       );
     }
 
     Widget aboutTeks(){
       return Container(
-        height: 380,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 270, left: 24, right: 24),
+        margin: EdgeInsets.only(top: 30, left: 24, right: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Buckit Lembang',
+              blog.title,
               style: black2TextStyle.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.w700
               ),
             ),
             SizedBox(height: 10,),
-            Text(
-              '''
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas id mi justo. Pellentesque luctus nisl in nulla porttitor dictum eget ut sapien. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam vestibulum leo ut sodales convallis. Nunc a viverra turpis, non pretium turpis. Cras vehicula, dolor at consectetur efficitur, turpis purus lobortis mi, rutrum lobortis diam libero cursus quam. Vivamus suscipit urna magna, ut mattis magna vulputate sit amet. Mauris rutrum metus leo, nec dapibus nisi feugiat mattis. Fusce et vestibulum urna, ac ultricies leo. Nullam sodales nibh sit amet tincidunt sagittis. Nam finibus placerat scelerisque.
-              ''',
-              style: black2TextStyle.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.normal
-              ),
-            )
+            Html(data: blog.description),
+            // HtmlWidget(blog.description),
+            // Text(
+            //   blog.description,
+            //   // Bidi.stripHtmlIfNeeded(blog.description),
+            //   style: black2TextStyle.copyWith(
+            //     fontSize: 14,
+            //     fontWeight: FontWeight.normal
+            //   ),
+            // )
           ],
         ),
       );
@@ -54,7 +59,7 @@ class DetailsPage extends StatelessWidget {
       return Container(
         // height: 300,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 670, left: 24, right: 24, bottom: 50),
+        margin: EdgeInsets.only(top: 30, left: 24, right: 24, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -175,15 +180,13 @@ class DetailsPage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            imageHeader(),
-            aboutTeks(),
-            userReviews()
-          ],
-        ),
-      ),
+      body: ListView(
+        children: [
+          imageHeader(),
+          aboutTeks(),
+          userReviews()
+        ],
+      )
     );
   }
 }
