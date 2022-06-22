@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
@@ -110,97 +111,126 @@ class _DetailsPageState extends State<DetailsPage> {
 
     Widget yourRating() {
       return Container(
-        margin: EdgeInsets.only(left: 24, right: 24, bottom: 50),
-        child: Form(
-          key: _formKey,
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "You're reviewing:",
-              style: black2TextStyle.copyWith(
-                  fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
+          margin: EdgeInsets.only(left: 24, right: 24, bottom: 50),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 10),
+                  margin: EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    "Your rating :",
+                    "You're reviewing:",
+                    style: black2TextStyle.copyWith(
+                        fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ),
-                RatingBar.builder(
-                    minRating: 1,
-                    itemSize: 24,
-                    updateOnDrag: true,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                    itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Text(
+                          "Your rating :",
                         ),
-                    onRatingUpdate: (rating) {
-                      setState(() {
-                        this.rating = rating;
-                      });
-                    }),
+                      ),
+                      RatingBar.builder(
+                          minRating: 1,
+                          itemSize: 24,
+                          updateOnDrag: true,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              this.rating = rating;
+                            });
+                          }),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Name',
+                          style: black2TextStyle,
+                        ),
+                        TextFormField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your name',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ]),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Your Review',
+                        style: black2TextStyle,
+                      ),
+                      TextFormField(
+                        controller: commentController,
+                        decoration: InputDecoration(
+                          hintText: 'write your review',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please write your review';
+                          }
+                          return null;
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Center(
+                    child: TextButton(
+                        onPressed: () {
+                          submitComment(widget.blog.id);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: keyOrangeColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Text(
+                              'Submit',
+                              style: whiteTextStyle,
+                            ),
+                          ),
+                        )),
+                  ),
+                ),
               ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Name',
-              style: black2TextStyle,
-            ),
-            TextField(
-                decoration: InputDecoration(
-              hintText: 'Write your name here',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            )),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Your Review',
-              style: black2TextStyle,
-            ),
-            TextField(
-                decoration: InputDecoration(
-              hintText: 'Write your Review here',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            )),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: TextButton(
-                  onPressed: () {},
-                  child: Container(
-                    height: 30,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: keyOrangeColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: Text(
-                        'Submit',
-                        style: whiteTextStyle,
-                      ),
-                    ),
-                  )),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-        )
-      );
+          ));
     }
 
     return Scaffold(
@@ -221,23 +251,28 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   // Submit Comment
-  void submitComment(int blogId) {
-    if (nameController.text.isEmpty) {
-      print('Name is empty');
-    } else if (commentController.text.isEmpty) {
-      print('Comment is empty');
-    } else {
-      CommentsModel comment = CommentsModel(
-        id: 0,
-        name: nameController.text,
-        comment: commentController.text,
-        blogId: blogId,
+  submitComment(int blogId) async {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("submitting comment...")),
       );
-
-      commentsServ.postComments(comment);
-      nameController.clear();
-      commentController.clear();
-      loadComments(blogId);
+      final ipv4 = await Ipify.ipv4();
+      CommentsModel comment = CommentsModel(
+          blogId: blogId,
+          id: 0,
+          comment: commentController.text,
+          name: nameController.text,
+          star: (rating * 20).toInt(),
+          ip: ipv4);
+      try {
+        await commentsServ.postComments(comment);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => super.widget));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     }
   }
 }

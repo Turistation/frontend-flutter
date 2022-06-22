@@ -45,16 +45,16 @@ class CustomReviews extends StatelessWidget {
                 fontSize: 14, fontWeight: FontWeight.normal),
           ),
           RichText(
-            text:
-                TextSpan(text: 'Review By ', style: black2TextStyle, children: [
-              TextSpan(
-                  text: comments.name,
-                  style: black2TextStyle.copyWith(fontWeight: FontWeight.w700)),
-              TextSpan(
-                  text:
-                      ' ${DateFormat("dd-MM-yyyy").format(new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(comments.createdAt))}',
-                  style: black2TextStyle),
-            ]),
+            text: TextSpan(
+                text: 'Review By ',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                children: [
+                  TextSpan(text: comments.name, style: TextStyle(fontSize: 12)),
+                  TextSpan(
+                      text:
+                          ' ${DateFormat("dd-MM-yyyy").format(new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(comments.createdAt))}',
+                      style: TextStyle(fontSize: 12)),
+                ]),
           ),
         ],
       ),

@@ -21,17 +21,20 @@ class CommentsService {
     }
   }
 
-  Future<int> postComments(CommentsModel blog) async {
+  Future<int> postComments(CommentsModel comment) async {
     final url = Uri.parse(apiUrl + '/comments');
     final response = await post(url,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(blog.toJson()));
-    if (response.statusCode == 200) {
+        body: jsonEncode(comment.toJson()));
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.statusCode;
     } else {
-      throw "Failed to load user comments";
+      print(response.statusCode);
+      var body = jsonDecode(response.body);
+      print(body);
+      throw "Failed to post  comments";
     }
   }
 }

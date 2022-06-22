@@ -7,12 +7,14 @@ class CommentsModel {
   final int id;
   final String createdAt;
   final int blogId;
+  final String ip;
 
   CommentsModel({
     this.comment = '',
     this.star = 0,
     this.name = '',
     this.createdAt = '',
+    this.ip = '',
     required this.blogId,
     required this.id,
   });
@@ -40,5 +42,6 @@ class CommentsModel {
         'star': star,
         'created_at': createdAt,
         'blogs_id': blogId,
+        'ip': ip,
       };
 }

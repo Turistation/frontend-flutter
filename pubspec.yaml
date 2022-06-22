@@ -29,6 +29,7 @@ environment:
 dependencies:
   bloc: ^7.2.1
   cupertino_icons: ^1.0.2
+  dart_ipify: ^1.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.2
