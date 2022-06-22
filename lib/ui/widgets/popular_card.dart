@@ -19,7 +19,7 @@ class PopularCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 15, right: 15),
         margin: EdgeInsets.only(right: 24),
-        height: 240,
+        height: 220,
         width: 177,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
