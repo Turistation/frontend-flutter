@@ -15,6 +15,7 @@ class CommentsService {
           body['data']['comments'].map<CommentsModel>((json) {
         return CommentsModel.fromJson(json);
       }).toList();
+      comments = comments.reversed.toList();
       return comments;
     } else {
       throw "Failed to load user comments";
