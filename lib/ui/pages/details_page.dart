@@ -28,6 +28,7 @@ class _DetailsPageState extends State<DetailsPage> {
   final CommentsService commentsServ = CommentsService();
   late List<CommentsModel> commentsList = [];
   double rating = 0.0;
+  String ratingError = "";
 
   @override
   void initState() {
@@ -127,32 +128,42 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Text(
-                          "Your rating :",
-                        ),
-                      ),
-                      RatingBar.builder(
-                          minRating: 1,
-                          itemSize: 24,
-                          updateOnDrag: true,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                          itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Text(
+                                "Your rating :",
                               ),
-                          onRatingUpdate: (rating) {
-                            setState(() {
-                              this.rating = rating;
-                            });
-                          }),
-                    ],
-                  ),
-                ),
+                            ),
+                            RatingBar.builder(
+                                minRating: 1,
+                                itemSize: 24,
+                                updateOnDrag: true,
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 2.0),
+                                itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                onRatingUpdate: (rating) {
+                                  setState(() {
+                                    this.rating = rating;
+                                    this.ratingError = "";
+                                  });
+                                }),
+                          ],
+                        ),
+                        Text(
+                          ratingError,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 5),
                   child: Column(
@@ -252,7 +263,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   // Submit Comment
   submitComment(int blogId) async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && rating > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("submitting comment...")),
       );
@@ -272,6 +283,13 @@ class _DetailsPageState extends State<DetailsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),
         );
+      }
+    } else {
+      if (rating == 0) {
+        setState(() {
+          this.ratingError = "Please rate the blog";
+        });
+        return;
       }
     }
   }
