@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:touristation/models/blogs.dart';
+import 'package:touristation/models/photos_model.dart';
+import 'package:touristation/services/photos_services.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/services/blog_service.dart';
 import 'package:touristation/ui/widgets/gallery_card.dart';
@@ -15,6 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final photosServices photosApi = photosServices();
+  late List<PhotosModel> photosList = [];
+
   final ApiService api = ApiService();
   late List<Blogs> blogList = [];
 
@@ -22,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     loadBlog();
+    loadPhotos();
   }
 
   @override
@@ -134,11 +140,8 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  GalleryCard(),
-                  GalleryCard(),
-                  GalleryCard(),
-                  GalleryCard(),
-                  GalleryCard(),
+                  for(var i = 0;i < photosList.length; i++)
+                    GalleryCard(photos: photosList[i]),
                 ],
               ),
             ))
@@ -166,7 +169,18 @@ class _HomePageState extends State<HomePage> {
     });
     return futureBlog;
   }
+
+  Future loadPhotos(){
+    Future<List<PhotosModel>> futurePhotos = photosApi.getPhotos();
+    futurePhotos.then((photosList){
+      setState(() {
+        this.photosList = photosList;
+      });
+    });
+    return futurePhotos;
+  }
 }
+
 
 class CustmSearchDelegate extends SearchDelegate {
   List<String> searchTerms = [

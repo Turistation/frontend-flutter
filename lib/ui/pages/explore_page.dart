@@ -4,8 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/widgets/feature_card.dart';
 
-class ExplorePage extends StatelessWidget {
+import '../../models/blogs.dart';
+import '../../services/blog_service.dart';
+import '../widgets/popular_card.dart';
+
+class ExplorePage extends StatefulWidget {
   const ExplorePage({ Key? key }) : super(key: key);
+
+  @override
+  State<ExplorePage> createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage> {
+
+  final ApiService api = ApiService();
+  late List<Blogs> blogList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadBlog();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +87,10 @@ class ExplorePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            FeatureCard(),
-            FeatureCard(),
-            FeatureCard(),
-            FeatureCard(),
-            FeatureCard(),
+            for (var i = 0; i < blogList.length; i++)
+              FeatureCard(
+                blog: blogList[i],
+              ),
           ],
         ),
       );
@@ -90,6 +108,17 @@ class ExplorePage extends StatelessWidget {
       )
     );
   }
+
+  Future loadBlog() {
+    Future<List<Blogs>> futureBlog = api.getBlog();
+    futureBlog.then((blogList) {
+      setState(() {
+        this.blogList = blogList;
+      });
+    });
+    return futureBlog;
+  }
+
 }
 
 class CustmSearchDelegate extends SearchDelegate{
