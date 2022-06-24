@@ -6,6 +6,7 @@ import 'package:touristation/models/photos_model.dart';
 import 'package:touristation/services/photos_services.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/services/blog_service.dart';
+import 'package:touristation/ui/pages/more_gallery.dart';
 import 'package:touristation/ui/widgets/gallery_card.dart';
 import 'package:touristation/ui/widgets/popular_card.dart';
 
@@ -121,16 +122,33 @@ class _HomePageState extends State<HomePage> {
 
     Widget galleryCard() {
       return Container(
-        height: 200,
+        height: 220,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 20, left: 24, bottom: 90),
+        margin: EdgeInsets.only(left: 24, bottom: 90, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Our Gallery',
-              style: blackTextStyle.copyWith(
-                  fontSize: 18, fontWeight: FontWeight.w700),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Our Gallery',
+                  style: blackTextStyle.copyWith(
+                      fontSize: 18, fontWeight: FontWeight.w700),
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => MorePhotos()));
+                  }, 
+                  child: Text(
+                    'see more',
+                    style: blueTextStyle.copyWith(
+                      fontSize: 15,
+                    ),
+                  )
+                )
+              ],
             ),
             SizedBox(
               height: 15,
