@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/widgets/feature_card.dart';
 
@@ -9,27 +10,48 @@ import '../../services/blog_service.dart';
 import '../widgets/popular_card.dart';
 
 class ExplorePage extends StatefulWidget {
-  const ExplorePage({ Key? key }) : super(key: key);
+  const ExplorePage({Key? key}) : super(key: key);
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  static const _pageSize = 10;
+
+  final PagingController<int, Blogs> _pagingController =
+      PagingController(firstPageKey: 1);
 
   final ApiService api = ApiService();
   late List<Blogs> blogList = [];
+  String query = "";
 
   @override
   void initState() {
     super.initState();
-    loadBlog();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await api.getAllBlog(pageKey, query: query);
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    Widget headerPage(){
+    Widget headerPage() {
       return Container(
         height: 45,
         width: double.infinity,
@@ -37,42 +59,27 @@ class _ExplorePageState extends State<ExplorePage> {
         child: Row(
           children: [
             IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              }, 
-              icon: Icon(Icons.arrow_back)
-            ),
-            Container(
-              height: 45,
-              width: 290,
-              // margin: EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: keyWhiteColor,
-                gradient: LinearGradient(colors:[
-                  keyWhiteColor,
-                  keyBackgroundColor.withOpacity(1),
-                ]),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: (){
-                      showSearch(
-                        context: context, 
-                        delegate: CustmSearchDelegate());
-                    }, 
-                    icon: Icon(Icons.search)
-                  )
-                ],
-              ),
-            ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back)),
+            Flexible(
+                child: TextField(
+              onChanged: (value) => query = value,
+              onSubmitted: (string) => {
+                _pagingController.refresh(),
+              },
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)))),
+            ))
           ],
         ),
       );
     }
 
-    Widget featureBlog(){
+    Widget featureBlog() {
       return Container(
         width: double.infinity,
         margin: EdgeInsets.only(top: 115, left: 24, right: 24, bottom: 50),
@@ -82,9 +89,7 @@ class _ExplorePageState extends State<ExplorePage> {
             Text(
               'Featured Blog',
               style: blackTextStyle.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w700
-              ),
+                  fontSize: 18, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 20),
             for (var i = 0; i < blogList.length; i++)
@@ -96,16 +101,44 @@ class _ExplorePageState extends State<ExplorePage> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: keyBackgroundColor,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            headerPage(),
-            featureBlog()
-          ],
+    // return Scaffold(
+    //     backgroundColor: keyBackgroundColor,
+    //     body: SingleChildScrollView(
+    //       child: Stack(
+    //         children: [headerPage(), featureBlog()],
+    //         // children: [
+    //         //   headerPage(),
+    //         // ],
+    //       ),
+    //     ));
+    // return PagedListView<int, Blogs>(
+    //   pagingController: _pagingController,
+    //   builderDelegate: PagedChildBuilderDelegate<Blogs>(
+    //     itemBuilder: (context, item, index) => FeatureCard(
+    //       blog: item,
+    //     ),
+    //   ),
+    // );
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            child: headerPage(),
+            margin: EdgeInsets.only(bottom: 15),
+          ),
         ),
-      )
+        PagedSliverList<int, Blogs>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Blogs>(
+            itemBuilder: (context, item, index) => FeatureCard(
+              blog: item,
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Container(height: 50),
+        )
+      ],
     );
   }
 
@@ -119,10 +152,14 @@ class _ExplorePageState extends State<ExplorePage> {
     return futureBlog;
   }
 
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 }
 
-class CustmSearchDelegate extends SearchDelegate{
-
+class CustmSearchDelegate extends SearchDelegate {
   List<String> searchTerms = [
     'Big Bang london',
     'Braga, Bandung',
@@ -140,7 +177,7 @@ class CustmSearchDelegate extends SearchDelegate{
     return [
       IconButton(
         icon: Icon(Icons.clear),
-        onPressed: (){
+        onPressed: () {
           query = '';
         },
       )
@@ -151,7 +188,7 @@ class CustmSearchDelegate extends SearchDelegate{
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back),
-      onPressed: (){
+      onPressed: () {
         close(context, null);
       },
     );
@@ -160,8 +197,8 @@ class CustmSearchDelegate extends SearchDelegate{
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
-    for (var place in searchTerms){
-      if (place.toLowerCase().contains(query.toLowerCase())){
+    for (var place in searchTerms) {
+      if (place.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(place);
       }
     }
@@ -179,14 +216,14 @@ class CustmSearchDelegate extends SearchDelegate{
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var place in searchTerms){
-      if (place.toLowerCase().contains(query.toLowerCase())){
+    for (var place in searchTerms) {
+      if (place.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(place);
       }
     }
     return ListView.builder(
       itemCount: matchQuery.length,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),

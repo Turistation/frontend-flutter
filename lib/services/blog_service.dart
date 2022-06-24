@@ -18,4 +18,20 @@ class ApiService {
       throw "Failed to load blogs list";
     }
   }
+
+  Future<List<Blogs>> getAllBlog(int page, {String query = ""}) async {
+    Response res = await get(Uri.parse(apiUrl +
+        'blogs?page=' +
+        page.toString() +
+        (query != "" ? '&query=' + query : '')));
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      List<Blogs> blogs = body['data']['blogs']['data'].map<Blogs>((json) {
+        return Blogs.fromJson(json: json);
+      }).toList();
+      return blogs;
+    } else {
+      throw "Failed to load blogs list";
+    }
+  }
 }
