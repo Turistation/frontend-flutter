@@ -1,25 +1,19 @@
 class Blogs {
-  final int id;
-  final String category;
-  final String title;
-  final String description;
-  final String photo;
+  int id;
+  String category;
+  String title;
+  String description;
+  String photo;
 
-  Blogs({
-    required this.id,
-    required this.category,
-    required this.title,
-    required this.description,
-    required this.photo,
-  });
+  Blogs(this.id, this.category, this.title, this.description, this.photo);
 
-  factory Blogs.fromJson(Map<String, dynamic> json) {
+  factory Blogs.fromJson({Map<String, dynamic> json = const {}}) {
     return Blogs(
-      id: json['id'] as int,
-      category: json['blog_category']['name'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      photo: json['photos'][0]['photos'] as String,
+      json['id'] == null ? 0 : json['id'],
+      json['category'] == null ? '' : json['category'],
+      json['title'] == null ? '' : json['title'],
+      json['description'] == null ? '' : json['description'],
+      json['photos'] == null ? '' : json['photos'][0]['photos'],
     );
   }
 

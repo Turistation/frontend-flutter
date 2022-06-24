@@ -11,7 +11,7 @@ class ApiService {
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       List<Blogs> blogs = body['data']['blogs'].map<Blogs>((json) {
-        return Blogs.fromJson(json);
+        return Blogs.fromJson(json: json);
       }).toList();
       return blogs;
     } else {
