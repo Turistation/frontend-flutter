@@ -8,14 +8,13 @@ import '../../services/photos_services.dart';
 import '../widgets/gallery_card.dart';
 
 class MorePhotos extends StatefulWidget {
-  const MorePhotos({ Key? key }) : super(key: key);
+  const MorePhotos({Key? key}) : super(key: key);
 
   @override
   State<MorePhotos> createState() => _MorePhotosState();
 }
 
 class _MorePhotosState extends State<MorePhotos> {
-
   final photosServices photosApi = photosServices();
   late List<PhotosModel> photosList = [];
   @override
@@ -26,43 +25,37 @@ class _MorePhotosState extends State<MorePhotos> {
 
   @override
   Widget build(BuildContext context) {
-
-    Widget morePhotos(){
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: [
-            for(var i = 0;i < photosList.length; i++)
-              GalleryCard(photos: photosList[i]),
-          ],
-        ),
-      );
+    Widget morePhotos() {
+      return GridView.builder(
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemCount: photosList.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return GalleryCard(photos: photosList[index]);
+          });
     }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Featured Gallery', style: black2TextStyle,),
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Colors.black
+        title: Text(
+          'Featured Gallery',
+          style: black2TextStyle,
         ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
       ),
-      body: ListView(
-        children: [
-          morePhotos()
-        ],
-      ),
+      body: morePhotos(),
     );
   }
 
-  Future loadPhotos(){
+  Future loadPhotos() {
     Future<List<PhotosModel>> futurePhotos = photosApi.getPhotos();
-    futurePhotos.then((photosList){
+    futurePhotos.then((photosList) {
       setState(() {
         this.photosList = photosList;
       });
     });
     return futurePhotos;
   }
-
 }

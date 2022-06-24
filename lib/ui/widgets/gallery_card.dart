@@ -14,7 +14,7 @@ class GalleryCard extends StatelessWidget {
       height: 156,
       width: 176,
       padding: EdgeInsets.only(left: 10, bottom: 16),
-      margin: EdgeInsets.only(right: 24),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         image: DecorationImage(
