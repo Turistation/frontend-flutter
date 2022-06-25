@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
 
     Widget galleryCard() {
       return Container(
-        height: 220,
+        height: 240,
         width: double.infinity,
         margin: EdgeInsets.only(left: 24, bottom: 90, right: 10),
         child: Column(

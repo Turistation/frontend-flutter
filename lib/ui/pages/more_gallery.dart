@@ -44,6 +44,26 @@ class _MorePhotosState extends State<MorePhotos> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context){
+              return[
+                PopupMenuItem(child: Text('Indonesia'), value: 0,),
+                PopupMenuItem(child: Text('Jepang'), value: 1,),
+                PopupMenuItem(child: Text('Singapore'), value: 2,),
+              ];
+            },
+            onSelected: (value){
+              if(value==0){
+                print('Indonesia is selected');
+              } else if(value==1){
+                print('Jepang is selected');
+              }else if(value==2){
+                print('Sinagpore is selected');
+              }
+            },
+          )
+        ],
       ),
       body: morePhotos(),
     );
