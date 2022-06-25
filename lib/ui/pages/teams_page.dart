@@ -54,7 +54,7 @@ class TeamsPage extends StatelessWidget {
               image: 'assets/agus.png'
             ),
             MembersCard(
-              name: 'Muhammad\nArfan\nJadulhaq', 
+              name: 'Arfan\nJadulhaq', 
               position: 'Frontend web\nDeveloper', 
               image: 'assets/arfan.png'
             ),
