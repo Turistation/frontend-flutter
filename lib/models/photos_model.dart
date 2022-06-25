@@ -4,7 +4,7 @@ import 'package:touristation/models/category_model.dart';
 
 class PhotosModel {
   int id;
-  CategroryModels category;
+  CategoryModel category;
   Blogs blog;
   String createdAt;
   String updatedAt;
@@ -16,7 +16,7 @@ class PhotosModel {
   factory PhotosModel.fromJson(Map<String, dynamic> json) {
     return PhotosModel(
       json['id'],
-      CategroryModels.fromJson(json['blog_category']),
+      CategoryModel.fromJson(json['blog_category']),
       (json["blogs"] as List).isEmpty
           ? Blogs.fromJson()
           : Blogs.fromJson(json: json["blogs"][0]),

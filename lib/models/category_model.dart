@@ -1,18 +1,18 @@
-class CategroryModels {
+class CategoryModel {
   final int id;
   final String name;
   final String createdAt;
   final String updatedAt;
 
-  CategroryModels({
+  CategoryModel({
     this.id = 0,
     this.name = '',
     this.createdAt = '',
     this.updatedAt = '',
   });
 
-  factory CategroryModels.fromJson(Map<String, dynamic> json) {
-    return CategroryModels(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
       id: json['id'],
       name: json['name'],
       createdAt: json['created_at'],
@@ -22,6 +22,6 @@ class CategroryModels {
 
   @override
   String toString() {
-    return 'CategroryModels{id: $id, createdAt : $createdAt, updatedAt: $updatedAt, name: $name}';
+    return 'CategoryModel{id: $id, createdAt : $createdAt, updatedAt: $updatedAt, name: $name}';
   }
 }

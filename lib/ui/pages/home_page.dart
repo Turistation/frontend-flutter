@@ -31,6 +31,34 @@ class _HomePageState extends State<HomePage> {
     loadPhotos();
   }
 
+  // const getSeason = () => {
+  //       // get current season
+  //       const currentDate = new Date();
+  //       const currentMonth = currentDate.getMonth();
+  //       const currentSeason =
+  //           currentMonth >= 3 && currentMonth <= 5
+  //               ? 'Spring'
+  //               : currentMonth >= 6 && currentMonth <= 8
+  //               ? 'Summer'
+  //               : currentMonth >= 9 && currentMonth <= 11
+  //               ? 'Autumn'
+  //               : 'Winter';
+
+  //       return currentSeason;
+  //   };
+  String getSeason() {
+    DateTime currentDate = DateTime.now();
+    int currentMonth = currentDate.month;
+    String currentSeason = currentMonth >= 3 && currentMonth <= 5
+        ? 'Spring'
+        : currentMonth >= 6 && currentMonth <= 8
+            ? 'Summer'
+            : currentMonth >= 9 && currentMonth <= 11
+                ? 'Autumn'
+                : 'Winter';
+    return currentSeason;
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -57,31 +85,6 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget searchBar() {
-      return Container(
-        height: 56,
-        width: 253,
-        margin: EdgeInsets.only(top: 15, left: 24, right: 24),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: keyWhiteColor,
-          gradient: LinearGradient(colors: [
-            keyWhiteColor,
-            keyBackgroundColor.withOpacity(1),
-          ]),
-        ),
-        child: Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: CustmSearchDelegate());
-                },
-                icon: Icon(Icons.search))
-          ],
-        ),
-      );
-    }
-
     Widget popularSummer() {
       return Container(
           height: 300,
@@ -95,7 +98,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 child: Text(
-                  'Popular in Summer',
+                  'Popular in ${getSeason()}',
                   style: blackTextStyle.copyWith(
                       fontSize: 18, fontWeight: FontWeight.w700),
                 ),
@@ -137,17 +140,18 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 TextButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => MorePhotos()));
-                  }, 
-                  child: Text(
-                    'see more',
-                    style: blueTextStyle.copyWith(
-                      fontSize: 15,
-                    ),
-                  )
-                )
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MorePhotos()));
+                    },
+                    child: Text(
+                      'see more',
+                      style: blueTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ))
               ],
             ),
             SizedBox(
@@ -158,7 +162,7 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for(var i = 0;i < photosList.length; i++)
+                  for (var i = 0; i < photosList.length; i++)
                     GalleryCard(photos: photosList[i]),
                 ],
               ),
@@ -171,7 +175,6 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       children: [
         header(),
-        searchBar(),
         popularSummer(),
         galleryCard(),
       ],
@@ -188,88 +191,13 @@ class _HomePageState extends State<HomePage> {
     return futureBlog;
   }
 
-  Future loadPhotos(){
+  Future loadPhotos() {
     Future<List<PhotosModel>> futurePhotos = photosApi.getPhotos();
-    futurePhotos.then((photosList){
+    futurePhotos.then((photosList) {
       setState(() {
         this.photosList = photosList;
       });
     });
     return futurePhotos;
-  }
-}
-
-
-class CustmSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = [
-    'Big Bang london',
-    'Braga, Bandung',
-    'Kota Lama, Semarang',
-    'Kota Tua, Jakarta',
-    'Bojongsoang, Bandung',
-    'Menara Eiffel, Paris',
-    'Alun-alun Bandung',
-    'National zoo, Singapore',
-    'Disneyland, Tokyo',
-  ];
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var place in searchTerms) {
-      if (place.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(place);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var place in searchTerms) {
-      if (place.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(place);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
   }
 }

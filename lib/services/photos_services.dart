@@ -6,15 +6,33 @@ import 'package:http/http.dart';
 class photosServices {
   final String apiUrl = "https://turistation-api.arfantestserver.my.id/api/";
 
-  Future<List<PhotosModel>> getPhotos() async{
+  Future<List<PhotosModel>> getPhotos() async {
     Response res = await get(Uri.parse(apiUrl + 'photos/recents'));
-    if(res.statusCode == 200){
+    if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      List<PhotosModel> photos = body['data']['photos'].map<PhotosModel>((json){
+      List<PhotosModel> photos =
+          body['data']['photos'].map<PhotosModel>((json) {
         return PhotosModel.fromJson(json);
       }).toList();
       return photos;
-    } else{
+    } else {
+      throw "failed load this Gallery";
+    }
+  }
+
+  Future<List<PhotosModel>> getAllPhotos(int page, {String query = ""}) async {
+    Response res = await get(Uri.parse(apiUrl +
+        'photos?page=' +
+        page.toString() +
+        (query != "" ? '&category_id=' + query : '')));
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      List<PhotosModel> photos =
+          body['data']['photos']['data'].map<PhotosModel>((json) {
+        return PhotosModel.fromJson(json);
+      }).toList();
+      return photos;
+    } else {
       throw "failed load this Gallery";
     }
   }
