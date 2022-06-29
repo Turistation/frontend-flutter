@@ -60,7 +60,7 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(context, '/main-page', (route) => false);
                 },
                 icon: Icon(Icons.arrow_back)),
             Flexible(
