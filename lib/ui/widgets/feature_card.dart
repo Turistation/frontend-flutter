@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/pages/details_page.dart';
 
@@ -50,7 +51,19 @@ class FeatureCard extends StatelessWidget {
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(
-                      height: 5,
+                      height: 40,
+                    ),
+                    Text(
+                      blog.admin.name,
+                      style: black2TextStyle.copyWith(
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      ' ${DateFormat("dd-MM-yyyy").format(new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(blog.createdAt))}',
+                      style: black2TextStyle.copyWith(
+                        fontSize: 12,
+                      ),
                     ),
                   ]),
             )

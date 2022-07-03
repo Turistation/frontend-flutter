@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:touristation/models/blogs.dart';
 import 'package:touristation/shared/theme.dart';
 import 'package:touristation/ui/pages/details_page.dart';
@@ -47,9 +48,21 @@ class PopularCard extends StatelessWidget {
                   fontSize: 14, fontWeight: FontWeight.w500),
             ),
             SizedBox(
-              height: 5,
+              height: 17,
             ),
-            Text(blog.category, style: blackTextStyle.copyWith(fontSize: 12)),
+            Text(
+              blog.admin.name,
+              style: black2TextStyle.copyWith(
+                fontSize: 12
+              ),
+            ),
+            SizedBox(height: 3,),
+            Text(
+              ' ${DateFormat("dd-MM-yyyy").format(new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(blog.createdAt))}',
+              style: black2TextStyle.copyWith(
+                fontSize: 11
+              ),
+            )
           ],
         ),
       ),
