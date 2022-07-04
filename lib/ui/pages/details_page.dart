@@ -56,6 +56,16 @@ class _DetailsPageState extends State<DetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+                widget.blog.admin.name +
+                    ", " +
+                    DateFormat("dd-MM-yyyy").format(
+                        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                            .parse(widget.blog.createdAt)),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey)),
+            Text(
               widget.blog.title,
               style: black2TextStyle.copyWith(
                   fontSize: 20, fontWeight: FontWeight.w700),

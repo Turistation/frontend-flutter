@@ -50,8 +50,14 @@ class FeatureCard extends StatelessWidget {
                       style: blackTextStyle.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(
-                      height: 40,
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.yellow),
+                        Text(blog.comments.isEmpty
+                            ? '0'
+                            : blog.getAvgStar().toString())
+                      ],
                     ),
                     Text(
                       blog.admin.name,
