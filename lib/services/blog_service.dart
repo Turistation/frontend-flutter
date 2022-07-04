@@ -38,14 +38,10 @@ class ApiService {
       queryParams["date"] = date;
     }
 
-    // var uri = Uri.https(
-    //     "turistation-api.arfantestserver.my.id", "/api/blogs", queryParams);
-    var uri = Uri.http("192.168.1.7:8000", "/api/blogs", queryParams);
-
-    print(uri);
+    var uri = Uri.https(
+        "turistation-api.arfantestserver.my.id", "/api/blogs", queryParams);
 
     Response res = await get(uri);
-    print(res.statusCode);
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
