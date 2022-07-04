@@ -25,6 +25,8 @@ class _ExplorePageState extends State<ExplorePage> {
   final ApiService api = ApiService();
   late List<Blogs> blogList = [];
   String query = "";
+  String dateQuery = "";
+  String ratingQuery = "";
 
   @override
   void initState() {
@@ -36,7 +38,13 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await api.getAllBlog(pageKey, query: query);
+      final newItems =
+          await api.getAllBlog(pageKey, query:query, rating: ratingQuery, date: dateQuery);
+      if (ratingQuery != "" || dateQuery != "") {
+        ratingQuery = "";
+        dateQuery = "";
+      }
+      ;
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -60,7 +68,8 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, '/main-page', (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/main-page', (route) => false);
                 },
                 icon: Icon(Icons.arrow_back)),
             Flexible(
@@ -73,7 +82,58 @@ class _ExplorePageState extends State<ExplorePage> {
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)))),
-            ))
+            )),
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Text("Newest Uploaded Blog"),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text("Oldest Uploaded Blog"),
+                ),
+                PopupMenuItem(
+                  value: 3,
+                  child: Text("Rating Highest"),
+                ),
+                PopupMenuItem(
+                  value: 4,
+                  child: Text("Rating Lowest"),
+                ),
+              ],
+              initialValue: 2,
+              onCanceled: () {
+                print("You have canceled the menu.");
+              },
+              onSelected: (value) {
+                switch (value) {
+                  case 1:
+                    // do something
+                    dateQuery = "date-new-to-old";
+                    _pagingController.refresh();
+
+                    print("date-new-to-old");
+                    break;
+                  case 2:
+                    // do something else
+                    dateQuery = "date-old-to-new";
+                    _pagingController.refresh();
+                    print("date-old-to-new");
+                    break;
+                  case 3:
+                    ratingQuery = "rating-high-to-low";
+                    _pagingController.refresh();
+                    print("rating-high-to-low");
+                    break;
+                  case 4:
+                    ratingQuery = "rating-low-to-high";
+                    _pagingController.refresh();
+                    break;
+                }
+              },
+              icon: Icon(Icons.list),
+            )
           ],
         ),
       );
