@@ -21,23 +21,32 @@ class ApiService {
 
   Future<List<Blogs>> getAllBlog(int page,
       {String query = "", String rating = "", String date = ""}) async {
-    Response res = await get(Uri.parse(apiUrl +
-        'blogs?page=' +
-        page.toString() +
-        (query != ""
-            ? '&query=' + query
-            : rating != ""
-                ? '&rating=' + rating
-                : date != ""
-                    ? '&date=' + date
-                    : '')));
-    print(query != ""
-        ? '&query=' + query
-        : rating != ""
-            ? '&rating=' + rating
-            : date != ""
-                ? '&date=' + date
-                : '');
+    Map<String, dynamic> queryParams = {};
+    if (page > 0) {
+      queryParams["page"] = page.toString();
+    }
+
+    if (query != "") {
+      queryParams["query"] = query;
+    }
+
+    if (rating != "") {
+      queryParams["rating"] = rating;
+    }
+
+    if (date != "") {
+      queryParams["date"] = date;
+    }
+
+    // var uri = Uri.https(
+    //     "turistation-api.arfantestserver.my.id", "/api/blogs", queryParams);
+    var uri = Uri.http("192.168.1.7:8000", "/api/blogs", queryParams);
+
+    print(uri);
+
+    Response res = await get(uri);
+    print(res.statusCode);
+
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       List<Blogs> blogs = body['data']['blogs']['data'].map<Blogs>((json) {

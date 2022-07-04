@@ -27,6 +27,7 @@ class _ExplorePageState extends State<ExplorePage> {
   String query = "";
   String dateQuery = "";
   String ratingQuery = "";
+  int popMenuInitialValue = 0;
 
   @override
   void initState() {
@@ -38,8 +39,8 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems =
-          await api.getAllBlog(pageKey, query:query, rating: ratingQuery, date: dateQuery);
+      final newItems = await api.getAllBlog(pageKey,
+          query: query, rating: ratingQuery, date: dateQuery);
       if (ratingQuery != "" || dateQuery != "") {
         ratingQuery = "";
         dateQuery = "";
@@ -102,33 +103,38 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Text("Rating Lowest"),
                 ),
               ],
-              initialValue: 2,
+              initialValue: popMenuInitialValue,
               onCanceled: () {
                 print("You have canceled the menu.");
               },
               onSelected: (value) {
                 switch (value) {
                   case 1:
-                    // do something
+                    popMenuInitialValue = 1;
                     dateQuery = "date-new-to-old";
                     _pagingController.refresh();
 
                     print("date-new-to-old");
                     break;
                   case 2:
-                    // do something else
+                    popMenuInitialValue = 2;
                     dateQuery = "date-old-to-new";
                     _pagingController.refresh();
+
                     print("date-old-to-new");
                     break;
                   case 3:
+                    popMenuInitialValue = 3;
                     ratingQuery = "rating-high-to-low";
                     _pagingController.refresh();
+
                     print("rating-high-to-low");
                     break;
                   case 4:
+                    popMenuInitialValue = 4;
                     ratingQuery = "rating-low-to-high";
                     _pagingController.refresh();
+
                     break;
                 }
               },
