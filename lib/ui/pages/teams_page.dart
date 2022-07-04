@@ -49,7 +49,7 @@ class TeamsPage extends StatelessWidget {
               image: 'assets/karom.png'
             ),
             MembersCard(
-              name: 'I Gde Bagus\nJanardana', 
+              name: 'I Gde Bagus\nJanardana\nAbasan', 
               position: 'Backend\nDeveloper', 
               image: 'assets/agus.png'
             ),

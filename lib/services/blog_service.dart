@@ -19,11 +19,25 @@ class ApiService {
     }
   }
 
-  Future<List<Blogs>> getAllBlog(int page, {String query = ""}) async {
+  Future<List<Blogs>> getAllBlog(int page,
+      {String query = "", String rating = "", String date = ""}) async {
     Response res = await get(Uri.parse(apiUrl +
         'blogs?page=' +
         page.toString() +
-        (query != "" ? '&query=' + query : '')));
+        (query != ""
+            ? '&query=' + query
+            : rating != ""
+                ? '&rating=' + rating
+                : date != ""
+                    ? '&date=' + date
+                    : '')));
+    print(query != ""
+        ? '&query=' + query
+        : rating != ""
+            ? '&rating=' + rating
+            : date != ""
+                ? '&date=' + date
+                : '');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       List<Blogs> blogs = body['data']['blogs']['data'].map<Blogs>((json) {
